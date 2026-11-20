@@ -4,6 +4,12 @@ from src.graph import build_debate_graph
 
 MAX_ROUNDS = 1
 
+SAMPLE_TOPICS = [
+    "Should software teams rely on AI coding assistants as standard practice?",
+    "Should electric vehicles replace internal combustion cars by 2035?",
+    "Should universities ban AI tools in take-home exams?",
+]
+
 st.set_page_config(page_title="Multi-Agent Debate Arena", layout="wide")
 
 st.title("Multi-Agent Debate Arena")
@@ -18,9 +24,30 @@ with st.sidebar:
         "3. **Judge** scores both sides & returns a structured verdict"
     )
 
+if "debate_topic" not in st.session_state:
+    st.session_state.debate_topic = SAMPLE_TOPICS[0]
+
+st.markdown("**Type any custom debate topic below** (or click a sample prompt to test quickly):")
+
+col_s1, col_s2, col_s3 = st.columns(3)
+with col_s1:
+    if st.button("Sample: AI Coding", use_container_width=True):
+        st.session_state.debate_topic = SAMPLE_TOPICS[0]
+        st.rerun()
+with col_s2:
+    if st.button("Sample: EV Transition", use_container_width=True):
+        st.session_state.debate_topic = SAMPLE_TOPICS[1]
+        st.rerun()
+with col_s3:
+    if st.button("Sample: AI in Exams", use_container_width=True):
+        st.session_state.debate_topic = SAMPLE_TOPICS[2]
+        st.rerun()
+
 topic = st.text_input(
     "Debate Topic",
-    value="Should software teams rely on AI coding assistants as standard practice?",
+    key="debate_topic",
+    placeholder="Type your own debate question or proposition here...",
+    help="Enter any custom topic you want Pro, Con, and Judge to debate.",
 )
 
 if st.button("Start Debate", type="primary", disabled=not topic.strip()):
